@@ -8,11 +8,6 @@ class TurkeyData {
   Future<void> searchQuery(String query) async {
     if (_currentQuery == query) {
       result = await result.nextPage();
-      // int i = 0;
-      // result.forEach((e) {
-      //   print(i.toString() + e.title);
-      //   i = i + 1;
-      // });
       if (result.isEmpty) {
       } else {
         result.forEach((e) {
@@ -24,7 +19,6 @@ class TurkeyData {
           };
           metadata.add(v);
         });
-        //metadata = metadata.toSet().toList();
       }
     } else {
       _currentQuery = query;
