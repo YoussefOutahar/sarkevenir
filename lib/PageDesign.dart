@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class PageDesign extends StatefulWidget {
   const PageDesign({Key key, this.drawer, this.body}) : super(key: key);
@@ -24,6 +25,7 @@ class _PageDesignState extends State<PageDesign>
   }
 
   _doAnimation() {
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
     animationController.isCompleted ? _close() : _open();
   }
 

@@ -5,18 +5,27 @@ class TurkeyData {
   String _currentQuery;
   List metadata = [];
   SearchList result;
-  Future<void> searchQuery(String query, int tries) async {
+  Future<void> searchQuery(String query) async {
     if (_currentQuery == query) {
       result = await result.nextPage();
-      result.forEach((e) {
-        Map v = {
-          "title": e.title,
-          "description": e.description,
-          "imgPath": e.thumbnails.highResUrl,
-          "audioPath": e.url
-        };
-        metadata.add(v);
-      });
+      // int i = 0;
+      // result.forEach((e) {
+      //   print(i.toString() + e.title);
+      //   i = i + 1;
+      // });
+      if (result.isEmpty) {
+      } else {
+        result.forEach((e) {
+          Map v = {
+            "title": e.title,
+            "description": e.description,
+            "imgPath": e.thumbnails.highResUrl,
+            "audioPath": e.url
+          };
+          metadata.add(v);
+        });
+        //metadata = metadata.toSet().toList();
+      }
     } else {
       _currentQuery = query;
       result = await yt.search.getVideos(query);
@@ -26,7 +35,9 @@ class TurkeyData {
       if (query.isEmpty) {
         metadata = [];
       } else {
-        for (var i = 0; i < tries; i++) {
+        if (result.isEmpty) {
+          metadata = [];
+        } else {
           result.forEach((e) {
             Map v = {
               "title": e.title,
@@ -36,7 +47,6 @@ class TurkeyData {
             };
             metadata.add(v);
           });
-          result = await result.nextPage();
         }
       }
     }

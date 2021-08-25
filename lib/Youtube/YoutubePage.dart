@@ -20,7 +20,7 @@ class _YoutubePageState extends State<YoutubePage> {
 
   @override
   void initState() {
-    _searchQuery = _tData.searchQuery("Turkey", 1);
+    _searchQuery = _tData.searchQuery("Turkey");
     super.initState();
   }
 
@@ -32,15 +32,16 @@ class _YoutubePageState extends State<YoutubePage> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.fromLTRB(15, 8, 15, 8),
             child: OutlineSearchBar(
+              borderRadius: BorderRadius.circular(100),
               searchButtonPosition: SearchButtonPosition.leading,
               autoCorrect: true,
               enableSuggestions: true,
               hintText: "Search",
               onSearchButtonPressed: (search) {
                 _currentSearch = search;
-                _searchQuery = _tData.searchQuery(search, 3);
+                _searchQuery = _tData.searchQuery(search);
                 setState(() {});
               },
               onClearButtonPressed: (search) {
@@ -58,7 +59,7 @@ class _YoutubePageState extends State<YoutubePage> {
                     onNotification: (scrollDetails) {
                       if (scrollDetails.metrics.pixels ==
                           scrollDetails.metrics.maxScrollExtent) {
-                        _tData.searchQuery(_currentSearch, 1);
+                        _tData.searchQuery(_currentSearch);
                         setState(() {});
                       }
                       return false;
