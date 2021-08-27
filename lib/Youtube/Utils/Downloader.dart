@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flowder/flowder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:prefs/prefs.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
 class Downloader {
@@ -15,7 +16,13 @@ class Downloader {
   }
 
   void _setPath() async {
-    path = "/storage/emulated/0/Music";
+    var p = Prefs.getString("path");
+    if (p.isNotEmpty) {
+      path = p;
+    } else {
+      path = "/storage/emulated/0/Music";
+    }
+    print(path);
   }
 
   void startDownload({String link, String title, BuildContext context}) async {

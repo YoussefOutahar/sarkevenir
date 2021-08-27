@@ -113,6 +113,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.2"
+  filesystem_picker:
+    dependency: "direct main"
+    description:
+      name: filesystem_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.4"
   flowder:
     dependency: "direct main"
     description:
@@ -310,6 +317,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
+  prefs:
+    dependency: "direct main"
+    description:
+      name: prefs
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.3.0"
   process:
     dependency: transitive
     description:

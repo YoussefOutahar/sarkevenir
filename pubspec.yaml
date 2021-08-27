@@ -43,6 +43,8 @@ dependencies:
   audio_session: 
   path_provider: 
   sn_progress_dialog: 
+  prefs: 
+  filesystem_picker: 
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:prefs/prefs.dart';
 import 'package:rate_my_app/rate_my_app.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:filesystem_picker/filesystem_picker.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -72,6 +75,26 @@ class _SettingsState extends State<SettingsPage> {
         children: [
           Container(
             height: _screenData.size.height / 3.8,
+          ),
+          SizedBox(height: _screenData.size.height / 64),
+          ListTile(
+            leading: Icon(Icons.folder),
+            title: Text("Change Download Path"),
+            onTap: () async {
+              await Permission.storage.request();
+              await Permission.manageExternalStorage.request();
+              String path = await FilesystemPicker.open(
+                title: 'Save to folder',
+                context: context,
+                rootDirectory: Directory("/storage/emulated/0").absolute,
+                fsType: FilesystemType.folder,
+                pickText: 'Save file to this folder',
+                //folderIconColor: Colors.teal,
+              );
+              if (!(path == null || path.isEmpty)) {
+                Prefs.setString("path", path);
+              }
+            },
           ),
           SizedBox(height: _screenData.size.height / 64),
           ListTile(

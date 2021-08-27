@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:outline_search_bar/outline_search_bar.dart';
-
 import '../Data/TurkeyData.dart';
 import 'Components/VideoPage.dart';
 import 'Components/Vids.dart';
@@ -26,7 +25,6 @@ class _YoutubePageState extends State<YoutubePage> {
     _controller.addListener(() {
       if (_controller.offset >= _controller.position.maxScrollExtent &&
           !_controller.position.outOfRange) {
-        print("test");
         _tData.searchQuery(_currentSearch);
         setState(() {});
       }
