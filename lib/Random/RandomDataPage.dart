@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sarkevenir/Data/GlobalData.dart';
-import 'package:sarkevenir/Youtube/Components/Vids.dart';
+import 'package:sarkevenir/Providers/Themes.dart';
+import 'package:sarkevenir/Vids.dart';
 
 class RandomDataPage extends StatefulWidget {
   const RandomDataPage({Key key, @required this.isTurkey}) : super(key: key);
@@ -13,6 +15,8 @@ class _RandomDataPageState extends State<RandomDataPage> {
   GlobalData _gData = GlobalData();
   @override
   Widget build(BuildContext context) {
+    Themes theme = Provider.of<Themes>(context);
+    theme.getData();
     return Container(
       padding:
           EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 16, 0, 0),
@@ -22,7 +26,10 @@ class _RandomDataPageState extends State<RandomDataPage> {
         itemBuilder: (context, indx) {
           return Container(
             decoration: BoxDecoration(
-              color: Colors.grey[300],
+              color:
+                  (theme.themeData == ThemeData(brightness: Brightness.light))
+                      ? Colors.grey[300]
+                      : Colors.grey[800],
               borderRadius: BorderRadius.circular(35),
             ),
             margin: EdgeInsets.fromLTRB(10, 5, 10, 5),

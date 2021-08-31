@@ -132,6 +132,34 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_keyboard_visibility:
+    dependency: transitive
+    description:
+      name: flutter_keyboard_visibility
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.3"
+  flutter_keyboard_visibility_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_keyboard_visibility_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
+  flutter_keyboard_visibility_web:
+    dependency: transitive
+    description:
+      name: flutter_keyboard_visibility_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
+  flutter_material_color_picker:
+    dependency: "direct main"
+    description:
+      name: flutter_material_color_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0+2"
   flutter_rating_bar:
     dependency: transitive
     description:
@@ -144,6 +172,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_typeahead:
+    dependency: "direct main"
+    description:
+      name: flutter_typeahead
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.2.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -226,13 +261,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
-  outline_search_bar:
-    dependency: "direct main"
+  nested:
+    dependency: transitive
     description:
-      name: outline_search_bar
+      name: nested
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.0"
+    version: "1.0.0"
   path:
     dependency: transitive
     description:
@@ -331,6 +366,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.3"
+  provider:
+    dependency: "direct main"
+    description:
+      name: provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "6.0.0"
   rate_my_app:
     dependency: "direct main"
     description:
@@ -384,13 +426,6 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_windows
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.2"
-  simple_text_field:
-    dependency: transitive
-    description:
-      name: simple_text_field
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"

@@ -32,18 +32,32 @@ class PlayerYT {
     }
   }
 
-  getPosition() {
-    return _player.position;
-  }
+  Duration getTotalTime() => _player.duration;
+  isPlayerDoneLoading() => _player.playerState.playing;
+  Duration getBufferPosition() => _player.bufferedPosition;
+  seek(Duration duration) => _player.seek(duration);
 
   void play() {
     if (_player.playing) {
-      stopPlayer();
       _player.play();
     } else {
       _player.play();
     }
   }
+
+  forward() {
+    if (!(_player.position >= getTotalTime() - Duration(seconds: 10))) {
+      _player.seek(_player.position + Duration(seconds: 10));
+    }
+  }
+
+  rewind() {
+    if (!(_player.position <= Duration(seconds: 10))) {
+      _player.seek(_player.position - Duration(seconds: 10));
+    }
+  }
+
+  Stream<Duration> getPosition() => _player.positionStream;
 
   stopPlayer() => _player.stop();
   void pause() => _player.pause();

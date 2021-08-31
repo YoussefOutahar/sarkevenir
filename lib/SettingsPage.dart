@@ -1,10 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:prefs/prefs.dart';
+import 'package:provider/provider.dart';
 import 'package:rate_my_app/rate_my_app.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:filesystem_picker/filesystem_picker.dart';
+
+import 'Providers/Themes.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -70,6 +73,7 @@ class _SettingsState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     var _screenData = MediaQuery.of(context);
+    Themes theme = Provider.of<Themes>(context);
     return Scaffold(
       body: ListView(
         children: [
@@ -77,6 +81,21 @@ class _SettingsState extends State<SettingsPage> {
             height: _screenData.size.height / 3.8,
           ),
           SizedBox(height: _screenData.size.height / 64),
+          ListTile(
+            title: Text("Dark/Light Mode"),
+            leading: Icon(Icons.brightness_4_rounded),
+            onTap: () {
+              theme.changeTheme();
+            },
+          ),
+          SizedBox(height: _screenData.size.height / 64),
+          ListTile(
+            title: Text("Change Theme"),
+            leading: Icon(Icons.color_lens_rounded),
+            onTap: () {
+              theme.changeColor(context);
+            },
+          ),
           ListTile(
             leading: Icon(Icons.folder),
             title: Text("Change Download Path"),
@@ -93,6 +112,10 @@ class _SettingsState extends State<SettingsPage> {
               );
               if (!(path == null || path.isEmpty)) {
                 Prefs.setString("path", path);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  elevation: 8,
+                  content: Text("Path is set to \"" + path + "\""),
+                ));
               }
             },
           ),

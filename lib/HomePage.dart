@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'Features/Network.dart';
+import 'Providers/Themes.dart';
 import 'Random/RandomDataPage.dart';
-
 import 'Youtube/YoutubePage.dart';
 
 class HomeW extends StatefulWidget {
@@ -25,6 +26,8 @@ class _HomeWState extends State<HomeW> {
 
   @override
   Widget build(BuildContext context) {
+    Themes theme = Provider.of<Themes>(context);
+    theme.getData();
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -43,7 +46,9 @@ class _HomeWState extends State<HomeW> {
               padding: const EdgeInsets.all(150.0),
               child: Column(
                 children: [
-                  CircularProgressIndicator(),
+                  CircularProgressIndicator(
+                    color: theme.color,
+                  ),
                   Text("Loading Location")
                 ],
               ),

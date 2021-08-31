@@ -5,10 +5,15 @@ class TurkeyData {
   String _currentQuery;
   List metadata = [];
   SearchList result;
+  Future<List<String>> suggestions(String text) async {
+    return yt.search.getQuerySuggestions(text);
+  }
+
   Future<void> searchQuery(String query) async {
     if (_currentQuery == query) {
       result = await result.nextPage();
-      if (result.isEmpty) {
+      if (result == null) {
+        metadata = [];
       } else {
         result.forEach((e) {
           Map v = {

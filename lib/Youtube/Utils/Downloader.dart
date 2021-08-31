@@ -22,7 +22,6 @@ class Downloader {
     } else {
       path = "/storage/emulated/0/Music";
     }
-    print(path);
   }
 
   void startDownload({String link, String title, BuildContext context}) async {

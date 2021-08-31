@@ -80,44 +80,49 @@ class _VidsState extends State<Vids> with SingleTickerProviderStateMixin {
         ),
         Positioned(
           child: Container(
-              child: Text(
-                widget.title,
-                softWrap: true,
-                style: TextStyle(
-                    fontSize: MediaQuery.of(context).textScaleFactor * 17),
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  widget.title,
+                  softWrap: true,
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).textScaleFactor * 17),
+                ),
               ),
               margin: EdgeInsets.all(20)),
           left: MediaQuery.of(context).size.width / 4,
           right: MediaQuery.of(context).size.width / 8,
+          top: 0,
+          bottom: 0,
         ),
         if (!widget.isturkey)
-          Positioned(
-            child: Container(
-              child: Text(widget.description),
-              margin: EdgeInsets.all(20),
-            ),
-            left: MediaQuery.of(context).size.width / 4,
-            top: 35,
-          ),
-        if (!widget.isturkey)
-          Positioned(
-            right: 0,
-            top: MediaQuery.of(context).size.height / 20,
-            bottom: 0,
-            child: Container(
-              margin: EdgeInsets.all(20),
-              child: InkWell(
-                child: AnimatedIcon(
-                  icon: AnimatedIcons.play_pause,
-                  size: 40,
-                  progress: animationController,
+          // Positioned(
+          //   child: Container(
+          //     child: Text(widget.description),
+          //     margin: EdgeInsets.all(20),
+          //   ),
+          //   left: MediaQuery.of(context).size.width / 4,
+          //   top: 35,
+          // ),
+          if (!widget.isturkey)
+            Positioned(
+              right: 0,
+              top: MediaQuery.of(context).size.height / 20,
+              bottom: 0,
+              child: Container(
+                margin: EdgeInsets.all(20),
+                child: InkWell(
+                  child: AnimatedIcon(
+                    icon: AnimatedIcons.play_pause,
+                    size: 40,
+                    progress: animationController,
+                  ),
+                  onTap: () {
+                    _playGlobalData();
+                  },
                 ),
-                onTap: () {
-                  _playGlobalData();
-                },
               ),
             ),
-          ),
       ],
     );
   }

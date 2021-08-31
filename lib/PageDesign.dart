@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+
+import 'Providers/Themes.dart';
 
 class PageDesign extends StatefulWidget {
   const PageDesign({Key key, this.drawer, this.body}) : super(key: key);
@@ -47,6 +50,7 @@ class _PageDesignState extends State<PageDesign>
   @override
   Widget build(BuildContext context) {
     var _deviceSize = MediaQuery.of(context).size;
+    Themes theme = Provider.of<Themes>(context);
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
       floatingActionButton: SafeArea(
@@ -56,6 +60,7 @@ class _PageDesignState extends State<PageDesign>
             return Row(
               children: [
                 IconButton(
+                  color: theme.color,
                   iconSize: 28,
                   icon: Icon(Icons.menu_rounded),
                   onPressed: _doAnimation,
@@ -65,6 +70,7 @@ class _PageDesignState extends State<PageDesign>
                   child: Text(
                     "Sarki Evreni",
                     style: TextStyle(
+                      color: theme.color,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -82,9 +88,12 @@ class _PageDesignState extends State<PageDesign>
           double scale = 1 - (animationController.value * 0.5);
           return Stack(
             children: [
-              Opacity(
-                opacity: animationController.value,
-                child: widget.drawer,
+              IgnorePointer(
+                ignoring: (animationController.value == 1) ? false : true,
+                child: Opacity(
+                  opacity: animationController.value,
+                  child: widget.drawer,
+                ),
               ),
               Transform(
                 alignment: Alignment.centerLeft,

@@ -35,7 +35,6 @@ dependencies:
   youtube_explode_dart: 
   youtube_parser: 
   audio_video_progress_bar: 
-  outline_search_bar: 
   flutter_youtube_downloader: 
   flowder: 
   permission_handler: 
@@ -45,6 +44,9 @@ dependencies:
   sn_progress_dialog: 
   prefs: 
   filesystem_picker: 
+  provider:
+  flutter_material_color_picker:
+  flutter_typeahead: 
 
 dev_dependencies:
   flutter_test:
