@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:prefs/prefs.dart';
 import 'package:provider/provider.dart';
 import 'HomePage.dart';
@@ -13,6 +14,12 @@ Future<void> main() async {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   Provider.debugCheckInvalidValueType = null;
   await Prefs.init();
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
+    androidNotificationChannelName: 'Sarki Evreni',
+    androidNotificationOngoing: true,
+    androidShowNotificationBadge: false,
+  );
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<Themes>(create: (_) => Themes()),

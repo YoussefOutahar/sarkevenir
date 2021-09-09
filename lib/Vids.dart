@@ -1,5 +1,9 @@
+import 'package:provider/provider.dart';
+
 import '/Youtube/Utils/Player.dart';
 import 'package:flutter/material.dart';
+
+import 'Providers/Themes.dart';
 
 class Vids extends StatefulWidget {
   final String title;
@@ -55,6 +59,7 @@ class _VidsState extends State<Vids> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    Themes theme = Provider.of<Themes>(context);
     return Stack(
       children: [
         Positioned(
@@ -62,6 +67,13 @@ class _VidsState extends State<Vids> with SingleTickerProviderStateMixin {
             children: [
               Container(
                 margin: EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: theme.color,
+                    width: 2.5,
+                  ),
+                ),
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width / 5,
                   height: MediaQuery.of(context).size.height / 8,

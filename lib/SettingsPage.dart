@@ -24,7 +24,7 @@ class _SettingsState extends State<SettingsPage> {
     googlePlayIdentifier: 'com.outahar.qequalizer',
   );
   String _url =
-      "https://www.paypal.com/paypalme/my/settings?flow=cmV0dXJuVXJsPS9teWFjY291bnQvdHJhbnNmZXIvaG9tZXBhZ2UvcmVxdWVzdCZjYW5jZWxVcmw9L215YWNjb3VudC90cmFuc2Zlci9ob21lcGFnZS9yZXF1ZXN0";
+      "https://play.google.com/store/apps/details?id=com.outahar.qequalizer";
   void _launchURL() async => await canLaunch(_url)
       ? await launch(_url)
       : throw 'Could not launch $_url';
@@ -121,8 +121,8 @@ class _SettingsState extends State<SettingsPage> {
           ),
           SizedBox(height: _screenData.size.height / 64),
           ListTile(
-            leading: Icon(Icons.monetization_on),
-            title: Text("Donate"),
+            leading: Icon(Icons.star_rate),
+            title: Text("Rate Us"),
             onTap: () {
               _launchURL();
             },

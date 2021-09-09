@@ -13,8 +13,14 @@ class VideoPage extends StatefulWidget {
   final String description;
   final String imgPath;
   final String audioPath;
+  final PlayerYT player;
   const VideoPage(
-      {Key key, this.imgPath, this.title, this.description, this.audioPath})
+      {Key key,
+      this.imgPath,
+      this.title,
+      this.description,
+      this.audioPath,
+      this.player})
       : super(key: key);
 
   @override
@@ -24,7 +30,6 @@ class VideoPage extends StatefulWidget {
 class _VideoPageState extends State<VideoPage>
     with SingleTickerProviderStateMixin {
   Downloader download = Downloader();
-  PlayerYT player = PlayerYT();
 
   AnimationController _animationController;
   YoutubeExplode yt;
@@ -33,6 +38,7 @@ class _VideoPageState extends State<VideoPage>
   Future<String> _extractedLink;
 
   bool _isplaying = false;
+  int firstTry = 0;
 
   Future<String> extractYoutubeLink() async {
     String link;
@@ -46,8 +52,11 @@ class _VideoPageState extends State<VideoPage>
     return link;
   }
 
+  Stream<dynamic> startProgress;
+
   @override
   void initState() {
+    widget.player.init();
     _animationController = new AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 500),
@@ -64,7 +73,6 @@ class _VideoPageState extends State<VideoPage>
   void dispose() {
     _animationController.stop();
     _animationController.dispose();
-    player.stopPlayer();
     super.dispose();
   }
 
@@ -73,188 +81,161 @@ class _VideoPageState extends State<VideoPage>
     Themes theme = Provider.of<Themes>(context);
     return Scaffold(
       body: SafeArea(
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  child: Hero(
-                    tag: widget.audioPath,
-                    child: Image(
-                      image: NetworkImage(widget.imgPath),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 60),
-                FutureBuilder(
-                  future: _extractedLink,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      return Container(
+        child: FutureBuilder(
+          future: _extractedLink,
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return Stack(
+                children: [
+                  Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: Hero(
+                          tag: widget.audioPath,
+                          child: Image(
+                            image: NetworkImage(widget.imgPath),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 60),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 40),
                         width: MediaQuery.of(context).size.width * (1 - 1 / 16),
-                        child: FutureBuilder(
-                          future: player.init(snapshot.data),
+                        child: StreamBuilder(
+                          stream: startProgress,
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              return StreamBuilder(
-                                stream: player.getPosition(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.active) {
-                                    return ProgressBar(
-                                      progressBarColor: theme.color,
-                                      thumbColor: theme.color,
-                                      bufferedBarColor:
-                                          theme.color.withOpacity(0.3),
-                                      baseBarColor:
-                                          theme.color.withOpacity(0.1),
-                                      thumbGlowColor:
-                                          theme.color.withOpacity(0.3),
-                                      onSeek: (Duration seek) {
-                                        player.seek(seek);
-                                      },
-                                      buffered:
-                                          (player.getBufferPosition() == null)
-                                              ? Duration.zero
-                                              : player.getBufferPosition(),
-                                      progress: (player.getPosition() == null)
-                                          ? Duration.zero
-                                          : snapshot.data,
-                                      total: (player.getTotalTime() == null)
-                                          ? Duration.zero
-                                          : player.getTotalTime(),
-                                    );
-                                  } else {
-                                    return CircularProgressIndicator();
-                                  }
+                                ConnectionState.active) {
+                              return ProgressBar(
+                                progressBarColor: theme.color,
+                                thumbColor: theme.color,
+                                bufferedBarColor: theme.color.withOpacity(0.3),
+                                baseBarColor: theme.color.withOpacity(0.1),
+                                thumbGlowColor: theme.color.withOpacity(0.3),
+                                onSeek: (Duration seek) {
+                                  widget.player.seek(seek);
                                 },
+                                buffered:
+                                    (widget.player.getBufferPosition() == null)
+                                        ? Duration.zero
+                                        : widget.player.getBufferPosition(),
+                                progress: (widget.player.getPosition() == null)
+                                    ? Duration.zero
+                                    : snapshot.data,
+                                total: (widget.player.getTotalTime() == null)
+                                    ? Duration.zero
+                                    : widget.player.getTotalTime(),
                               );
                             } else {
-                              return Container();
+                              return ProgressBar(
+                                progressBarColor: theme.color,
+                                thumbColor: theme.color,
+                                bufferedBarColor: theme.color.withOpacity(0.3),
+                                baseBarColor: theme.color.withOpacity(0.1),
+                                thumbGlowColor: theme.color.withOpacity(0.3),
+                                onSeek: (Duration seek) {
+                                  widget.player.seek(seek);
+                                },
+                                buffered: Duration.zero,
+                                progress: Duration.zero,
+                                total: Duration.zero,
+                              );
                             }
                           },
                         ),
-                      );
-                    } else {
-                      return CircularProgressIndicator(
-                        color: theme.color,
-                      );
-                    }
-                  },
-                ),
-                FutureBuilder(
-                  future: _extractedLink,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      return FutureBuilder(
-                          future: player.init(snapshot.data),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              return Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ClipOval(
-                                    child: Material(
-                                      elevation: 10,
-                                      color: theme.color,
-                                      borderRadius: BorderRadius.circular(100),
-                                      child: IconButton(
-                                          color: Colors.white,
-                                          onPressed: () {
-                                            player.rewind();
-                                          },
-                                          icon: Icon(
-                                            Icons.fast_rewind_rounded,
-                                          )),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: ClipOval(
-                                      child: Material(
-                                        elevation: 10,
-                                        color: theme.color,
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        child: IconButton(
-                                          padding: EdgeInsets.all(15),
-                                          iconSize: 30,
-                                          onPressed: () async {
-                                            if (snapshot.data == "") {
-                                              if (_isplaying) {
-                                                _animationController.reverse();
-                                                player.pause();
-                                              } else {
-                                                _animationController.forward();
-                                                player.play();
-                                              }
-                                              _isplaying =
-                                                  (_isplaying) ? false : true;
-                                            } else {
-                                              player.init(snapshot.data);
-                                              if (_isplaying) {
-                                                _animationController.reverse();
-                                                player.pause();
-                                              } else {
-                                                _animationController.forward();
-                                                player.play();
-                                              }
-                                              _isplaying =
-                                                  (_isplaying) ? false : true;
-                                            }
-                                          },
-                                          icon: AnimatedIcon(
-                                              color: Colors.white,
-                                              icon: AnimatedIcons.play_pause,
-                                              progress: _animationController),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  ClipOval(
-                                    child: Material(
-                                      elevation: 10,
-                                      color: theme.color,
-                                      borderRadius: BorderRadius.circular(100),
-                                      child: IconButton(
-                                        color: Colors.white,
-                                        onPressed: () {
-                                          player.forward();
-                                        },
-                                        icon: Icon(Icons.fast_forward_rounded),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            } else {
-                              return CircularProgressIndicator(
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ClipOval(
+                            child: Material(
+                              elevation: 10,
+                              color: theme.color,
+                              borderRadius: BorderRadius.circular(100),
+                              child: IconButton(
+                                  color: Colors.white,
+                                  onPressed: () {
+                                    widget.player.rewind();
+                                  },
+                                  icon: Icon(
+                                    Icons.fast_rewind_rounded,
+                                  )),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: ClipOval(
+                              child: Material(
+                                elevation: 10,
                                 color: theme.color,
-                              );
-                            }
-                          });
-                    } else {
-                      return Container();
-                    }
-                  },
-                )
-              ],
-            ),
-            FutureBuilder(
-              future: _extractedLink,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return Positioned(
+                                borderRadius: BorderRadius.circular(100),
+                                child: IconButton(
+                                  padding: EdgeInsets.all(15),
+                                  iconSize: 30,
+                                  onPressed: () async {
+                                    try {
+                                      if (firstTry == 0) {
+                                        _animationController.forward();
+                                        await widget.player.setAudioLink(
+                                            snapshot.data,
+                                            widget.imgPath,
+                                            widget.title);
+                                        widget.player.play();
+                                        _isplaying =
+                                            (_isplaying) ? false : true;
+                                        firstTry = firstTry + 1;
+                                        startProgress =
+                                            widget.player.getPosition();
+                                        setState(() {});
+                                      } else {
+                                        if (_isplaying) {
+                                          _animationController.reverse();
+                                          widget.player.pause();
+                                        } else {
+                                          _animationController.forward();
+                                          widget.player.play();
+                                        }
+                                        _isplaying =
+                                            (_isplaying) ? false : true;
+                                      }
+                                    } catch (e) {
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                  icon: AnimatedIcon(
+                                      color: Colors.white,
+                                      icon: AnimatedIcons.play_pause,
+                                      progress: _animationController),
+                                ),
+                              ),
+                            ),
+                          ),
+                          ClipOval(
+                            child: Material(
+                              elevation: 10,
+                              color: theme.color,
+                              borderRadius: BorderRadius.circular(100),
+                              child: IconButton(
+                                color: Colors.white,
+                                onPressed: () {
+                                  widget.player.forward();
+                                },
+                                icon: Icon(Icons.fast_forward_rounded),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Positioned(
                     right: 0,
                     top: MediaQuery.of(context).size.height / 3.2,
                     child: Padding(
                       padding: const EdgeInsets.all(18.5),
                       child: ClipRRect(
                         child: Material(
-                          elevation: 10,
                           color: theme.color,
                           borderRadius: BorderRadius.circular(20),
                           child: IconButton(
@@ -273,67 +254,70 @@ class _VideoPageState extends State<VideoPage>
                         ),
                       ),
                     ),
-                  );
-                } else {
-                  return Container();
-                }
-              },
-            ),
-            Positioned(
-              bottom: MediaQuery.of(context).size.height / 16,
-              left: 0,
-              right: 0,
-              child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  widget.description,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            IgnorePointer(
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.black.withOpacity(1),
-                      Colors.black.withOpacity(0.4),
-                      Colors.black.withOpacity(0),
-                      Colors.black.withOpacity(0),
-                      Colors.black.withOpacity(0),
-                      Colors.black.withOpacity(0),
-                      Colors.black.withOpacity(0),
-                      Colors.black.withOpacity(0),
+                  ),
+                  Positioned(
+                    bottom: MediaQuery.of(context).size.height / 16,
+                    left: 0,
+                    right: 0,
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
+                        widget.description,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  IgnorePointer(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.black.withOpacity(1),
+                            Colors.black.withOpacity(0.4),
+                            Colors.black.withOpacity(0),
+                            Colors.black.withOpacity(0),
+                            Colors.black.withOpacity(0),
+                            Colors.black.withOpacity(0),
+                            Colors.black.withOpacity(0),
+                            Colors.black.withOpacity(0),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: Icon(Icons.arrow_back_rounded),
+                        color: Colors.white,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
+                        child: Text(
+                          widget.title,
+                          style: TextStyle(color: Colors.white),
+                          softWrap: true,
+                          textScaleFactor:
+                              MediaQuery.of(context).textScaleFactor * 1.5,
+                        ),
+                      ),
                     ],
                   ),
-                ),
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(Icons.arrow_back_rounded),
-                  color: Colors.white,
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
-                  child: Text(
-                    widget.title,
-                    style: TextStyle(color: Colors.white),
-                    softWrap: true,
-                    textScaleFactor:
-                        MediaQuery.of(context).textScaleFactor * 1.5,
-                  ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              );
+            } else {
+              return Center(
+                  child: CircularProgressIndicator(
+                color: theme.color,
+              ));
+            }
+          },
         ),
       ),
     );

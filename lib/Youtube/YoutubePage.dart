@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:prefs/prefs.dart';
 import 'package:provider/provider.dart';
 import 'package:sarkevenir/Providers/Themes.dart';
+import 'package:sarkevenir/Youtube/Utils/Player.dart';
 import '../Data/TurkeyData.dart';
 import 'Components/VideoPage.dart';
 import '../Vids.dart';
@@ -17,13 +19,21 @@ class YoutubePage extends StatefulWidget {
 class _YoutubePageState extends State<YoutubePage> {
   Future<void> _searchQuery;
   TurkeyData _tData = TurkeyData();
-  String _currentSearch = "";
+  String _currentSearch;
   TextEditingController _textEditingController;
   ScrollController _controller;
+  PlayerYT _player = PlayerYT();
 
   @override
   void initState() {
-    _searchQuery = _tData.searchQuery("Turkey Music");
+    _currentSearch = Prefs.getString("search");
+    if (_currentSearch == "") {
+      _currentSearch = "Turkey Music";
+      _searchQuery = _tData.searchQuery(_currentSearch);
+    } else {
+      print(_currentSearch);
+      _searchQuery = _tData.searchQuery(_currentSearch);
+    }
     _controller = ScrollController();
     _textEditingController = TextEditingController();
     _controller.addListener(() {
@@ -34,6 +44,12 @@ class _YoutubePageState extends State<YoutubePage> {
       }
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _player.dispose();
+    super.dispose();
   }
 
   @override
@@ -85,6 +101,7 @@ class _YoutubePageState extends State<YoutubePage> {
                 ),
                 onSubmitted: (search) {
                   _currentSearch = search;
+                  Prefs.setString("search", _currentSearch);
                   _searchQuery = _tData.searchQuery(search);
                   setState(() {});
                 },
@@ -120,6 +137,7 @@ class _YoutubePageState extends State<YoutubePage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => VideoPage(
+                              player: _player,
                               title: _tData.metadata[indx]["title"],
                               description: _tData.metadata[indx]["description"],
                               imgPath: _tData.metadata[indx]["imgPath"],
