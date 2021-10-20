@@ -34,7 +34,10 @@ class Downloader {
         return AlertDialog(
           actions: [
             TextButton(
-              child: Text("Download as Music"),
+              child: Text(
+                "Download as Music",
+                style: TextStyle(color: theme.color),
+              ),
               onPressed: () async {
                 pd.show(
                     max: 100,
@@ -62,7 +65,10 @@ class Downloader {
               },
             ),
             TextButton(
-              child: Text("Download as Video"),
+              child: Text(
+                "Download as Video",
+                style: TextStyle(color: theme.color),
+              ),
               onPressed: () async {
                 pd.show(
                     max: 100,

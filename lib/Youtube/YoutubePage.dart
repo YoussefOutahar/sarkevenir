@@ -28,10 +28,9 @@ class _YoutubePageState extends State<YoutubePage> {
   void initState() {
     _currentSearch = Prefs.getString("search");
     if (_currentSearch == "") {
-      _currentSearch = "Turkey Music";
+      _currentSearch = "Music";
       _searchQuery = _tData.searchQuery(_currentSearch);
     } else {
-      print(_currentSearch);
       _searchQuery = _tData.searchQuery(_currentSearch);
     }
     _controller = ScrollController();
@@ -77,7 +76,6 @@ class _YoutubePageState extends State<YoutubePage> {
                     onPressed: () {
                       _currentSearch = "";
                       _textEditingController.text = "";
-                      _searchQuery = _tData.searchQuery(_currentSearch);
                       setState(() {});
                     },
                     icon: Icon(Icons.clear),
@@ -127,58 +125,55 @@ class _YoutubePageState extends State<YoutubePage> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 return Expanded(
-                  child: ListView.builder(
-                    controller: _controller,
-                    addAutomaticKeepAlives: true,
-                    itemCount: _tData.metadata.length,
-                    itemBuilder: (context, indx) {
-                      return InkWell(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => VideoPage(
-                              player: _player,
+                  child: GlowingOverscrollIndicator(
+                    axisDirection: AxisDirection.down,
+                    color: theme.color,
+                    child: ListView.builder(
+                      controller: _controller,
+                      addAutomaticKeepAlives: true,
+                      itemCount: _tData.metadata.length,
+                      itemBuilder: (context, indx) {
+                        return InkWell(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => VideoPage(
+                                player: _player,
+                                title: _tData.metadata[indx]["title"],
+                                description: _tData.metadata[indx]
+                                    ["description"],
+                                imgPath: _tData.metadata[indx]["imgPath"],
+                                audioPath: _tData.metadata[indx]["audioPath"],
+                              ),
+                            ),
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: (theme.themeData ==
+                                      ThemeData(brightness: Brightness.light))
+                                  ? Colors.grey[300]
+                                  : Colors.grey[800],
+                              borderRadius: BorderRadius.circular(35),
+                            ),
+                            margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                            child: Vids(
+                              isturkey: widget.isTurkey,
                               title: _tData.metadata[indx]["title"],
                               description: _tData.metadata[indx]["description"],
                               imgPath: _tData.metadata[indx]["imgPath"],
                               audioPath: _tData.metadata[indx]["audioPath"],
                             ),
                           ),
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: (theme.themeData ==
-                                    ThemeData(brightness: Brightness.light))
-                                ? Colors.grey[300]
-                                : Colors.grey[800],
-                            borderRadius: BorderRadius.circular(35),
-                          ),
-                          margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                          child: Vids(
-                            isturkey: widget.isTurkey,
-                            title: _tData.metadata[indx]["title"],
-                            description: _tData.metadata[indx]["description"],
-                            imgPath: _tData.metadata[indx]["imgPath"],
-                            audioPath: _tData.metadata[indx]["audioPath"],
-                          ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 );
               } else {
                 return Padding(
                   padding: const EdgeInsets.all(50.0),
-                  child: Column(
-                    children: [
-                      CircularProgressIndicator(
-                        color: theme.color,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text("Loading Videos"),
-                      )
-                    ],
+                  child: CircularProgressIndicator(
+                    color: theme.color,
                   ),
                 );
               }

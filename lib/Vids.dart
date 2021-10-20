@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
 
 import '/Youtube/Utils/Player.dart';
@@ -78,13 +79,13 @@ class _VidsState extends State<Vids> with SingleTickerProviderStateMixin {
                   width: MediaQuery.of(context).size.width / 5,
                   height: MediaQuery.of(context).size.height / 8,
                   child: Hero(
-                    tag: widget.audioPath,
-                    child: CircleAvatar(
-                      foregroundImage: NetworkImage(
-                        widget.imgPath,
-                      ),
-                    ),
-                  ),
+                      tag: widget.audioPath,
+                      child: CachedNetworkImage(
+                        imageUrl: widget.imgPath,
+                        imageBuilder: (context, img) {
+                          return CircleAvatar(foregroundImage: img);
+                        },
+                      )),
                 ),
               ),
             ],

@@ -98,10 +98,13 @@ class _VideoPageState extends State<VideoPage>
                           ),
                         ),
                       ),
-                      SizedBox(height: 60),
                       Container(
-                        padding: EdgeInsets.fromLTRB(0, 0, 0, 40),
-                        width: MediaQuery.of(context).size.width * (1 - 1 / 16),
+                        padding: EdgeInsets.fromLTRB(
+                            0,
+                            MediaQuery.of(context).size.height / 32,
+                            0,
+                            MediaQuery.of(context).size.height / 32),
+                        width: MediaQuery.of(context).size.width * (1 - 1 / 8),
                         child: StreamBuilder(
                           stream: startProgress,
                           builder: (context, snapshot) {
@@ -164,7 +167,11 @@ class _VideoPageState extends State<VideoPage>
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.all(8.0),
+                            padding: EdgeInsets.fromLTRB(
+                                MediaQuery.of(context).size.width / 32,
+                                0,
+                                MediaQuery.of(context).size.width / 32,
+                                0),
                             child: ClipOval(
                               child: Material(
                                 elevation: 10,
@@ -227,13 +234,21 @@ class _VideoPageState extends State<VideoPage>
                           ),
                         ],
                       ),
+                      Expanded(child: Container()),
+                      Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Text(
+                          widget.description,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                     ],
                   ),
                   Positioned(
                     right: 0,
                     top: MediaQuery.of(context).size.height / 3.2,
                     child: Padding(
-                      padding: const EdgeInsets.all(18.5),
+                      padding: EdgeInsets.all(18.5),
                       child: ClipRRect(
                         child: Material(
                           color: theme.color,
@@ -244,26 +259,14 @@ class _VideoPageState extends State<VideoPage>
                             iconSize: 30,
                             icon: Icon(Icons.download),
                             onPressed: () async {
-                              await extractYoutubeLink();
                               download.startDownload(
-                                  link: snapshot.data,
-                                  title: widget.title,
-                                  context: context);
+                                link: snapshot.data,
+                                title: widget.title,
+                                context: context,
+                              );
                             },
                           ),
                         ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: MediaQuery.of(context).size.height / 16,
-                    left: 0,
-                    right: 0,
-                    child: Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Text(
-                        widget.description,
-                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),

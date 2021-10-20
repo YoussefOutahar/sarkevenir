@@ -49,7 +49,6 @@ class _HomeWState extends State<HomeW> {
                   CircularProgressIndicator(
                     color: theme.color,
                   ),
-                  Text("Loading Location")
                 ],
               ),
             );

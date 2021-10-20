@@ -6,7 +6,7 @@
   <uses-permission android:name="android.permission.WAKE_LOCK"/>
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
   <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-  <application android:label="sarkevenir" android:icon="@mipmap/ic_launcher" tools:replace="android:label" android:requestLegacyExternalStorage="true">
+  <application android:label="sarkevenir" android:icon="@mipmap/launcher_icon" tools:replace="android:label" android:requestLegacyExternalStorage="true">
     <service android:name="com.ryanheise.audioservice.AudioService">
       <intent-filter>
         <action android:name="android.media.browse.MediaBrowserService" />

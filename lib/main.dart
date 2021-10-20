@@ -17,6 +17,7 @@ Future<void> main() async {
   await JustAudioBackground.init(
     androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
     androidNotificationChannelName: 'Sarki Evreni',
+    androidNotificationIcon: 'mipmap/launcher_icon',
     androidNotificationOngoing: true,
     androidShowNotificationBadge: false,
   );

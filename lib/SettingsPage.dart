@@ -75,73 +75,77 @@ class _SettingsState extends State<SettingsPage> {
     var _screenData = MediaQuery.of(context);
     Themes theme = Provider.of<Themes>(context);
     return Scaffold(
-      body: ListView(
-        children: [
-          Container(
-            height: _screenData.size.height / 3.8,
-          ),
-          SizedBox(height: _screenData.size.height / 64),
-          ListTile(
-            title: Text("Dark/Light Mode"),
-            leading: Icon(Icons.brightness_4_rounded),
-            onTap: () {
-              theme.changeTheme();
-            },
-          ),
-          SizedBox(height: _screenData.size.height / 64),
-          ListTile(
-            title: Text("Change Theme"),
-            leading: Icon(Icons.color_lens_rounded),
-            onTap: () {
-              theme.changeColor(context);
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.folder),
-            title: Text("Change Download Path"),
-            onTap: () async {
-              await Permission.storage.request();
-              await Permission.manageExternalStorage.request();
-              String path = await FilesystemPicker.open(
-                title: 'Save to folder',
-                context: context,
-                rootDirectory: Directory("/storage/emulated/0").absolute,
-                fsType: FilesystemType.folder,
-                pickText: 'Save file to this folder',
-                //folderIconColor: Colors.teal,
-              );
-              if (!(path == null || path.isEmpty)) {
-                Prefs.setString("path", path);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  elevation: 8,
-                  content: Text("Path is set to \"" + path + "\""),
-                ));
-              }
-            },
-          ),
-          SizedBox(height: _screenData.size.height / 64),
-          ListTile(
-            leading: Icon(Icons.star_rate),
-            title: Text("Rate Us"),
-            onTap: () {
-              _launchURL();
-            },
-          ),
-          SizedBox(height: _screenData.size.height / 64),
-          ListTile(
-            title: Text("About"),
-            leading: Icon(Icons.perm_device_information_sharp),
-            onTap: () {
-              showAboutDialog(
-                context: context,
-                applicationName: "Sarki Evreni",
-                applicationVersion: "v0.5",
-                applicationLegalese:
-                    "Sarki Something Something Something Something",
-              );
-            },
-          ),
-        ],
+      body: GlowingOverscrollIndicator(
+        axisDirection: AxisDirection.down,
+        color: theme.color,
+        child: ListView(
+          children: [
+            Container(
+              height: _screenData.size.height / 3.8,
+            ),
+            SizedBox(height: _screenData.size.height / 64),
+            ListTile(
+              title: Text("Dark/Light Mode"),
+              leading: Icon(Icons.brightness_4_rounded),
+              onTap: () {
+                theme.changeTheme();
+              },
+            ),
+            SizedBox(height: _screenData.size.height / 64),
+            ListTile(
+              title: Text("Change Theme"),
+              leading: Icon(Icons.color_lens_rounded),
+              onTap: () {
+                theme.changeColor(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.folder),
+              title: Text("Change Download Path"),
+              onTap: () async {
+                await Permission.storage.request();
+                await Permission.manageExternalStorage.request();
+                String path = await FilesystemPicker.open(
+                  title: 'Save to folder',
+                  context: context,
+                  rootDirectory: Directory("/storage/emulated/0").absolute,
+                  fsType: FilesystemType.folder,
+                  pickText: 'Save file to this folder',
+                  //folderIconColor: Colors.teal,
+                );
+                if (!(path == null || path.isEmpty)) {
+                  Prefs.setString("path", path);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    elevation: 8,
+                    content: Text("Path is set to \"" + path + "\""),
+                  ));
+                }
+              },
+            ),
+            SizedBox(height: _screenData.size.height / 64),
+            ListTile(
+              leading: Icon(Icons.star_rate),
+              title: Text("Rate Us"),
+              onTap: () {
+                _launchURL();
+              },
+            ),
+            SizedBox(height: _screenData.size.height / 64),
+            ListTile(
+              title: Text("About"),
+              leading: Icon(Icons.perm_device_information_sharp),
+              onTap: () {
+                showAboutDialog(
+                  context: context,
+                  applicationName: "Sarki Evreni",
+                  applicationVersion: "v0.5",
+                  // applicationLegalese:
+                  //     "Sarki Something Something Something Something",
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
