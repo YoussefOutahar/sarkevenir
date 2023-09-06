@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:prefs/prefs.dart';
 import 'package:provider/provider.dart';
 import 'package:sarkevenir/Providers/Themes.dart';
@@ -26,6 +27,13 @@ class _YoutubePageState extends State<YoutubePage> {
 
   @override
   void initState() {
+    JustAudioBackground.init(
+      androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
+      androidNotificationChannelName: 'Sarki Evreni',
+      androidNotificationIcon: 'mipmap/launcher_icon',
+      androidNotificationOngoing: true,
+      androidShowNotificationBadge: false,
+    );
     _currentSearch = Prefs.getString("search");
     if (_currentSearch == "") {
       _currentSearch = "Music";
@@ -179,6 +187,7 @@ class _YoutubePageState extends State<YoutubePage> {
               }
             },
           ),
+          //AdBanner()
         ],
       ),
     );

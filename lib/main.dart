@@ -1,6 +1,6 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:just_audio_background/just_audio_background.dart';
 import 'package:prefs/prefs.dart';
 import 'package:provider/provider.dart';
 import 'HomePage.dart';
@@ -13,14 +13,14 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   Provider.debugCheckInvalidValueType = null;
+  await Firebase.initializeApp();
+
   await Prefs.init();
-  await JustAudioBackground.init(
-    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
-    androidNotificationChannelName: 'Sarki Evreni',
-    androidNotificationIcon: 'mipmap/launcher_icon',
-    androidNotificationOngoing: true,
-    androidShowNotificationBadge: false,
-  );
+  // OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+  // OneSignal.shared.setAppId("a7fe9cdf-3f4b-42a9-ad85-94f3d33ebcbc");
+  // OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
+  //   print("Accepted permission: $accepted");
+  // });
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<Themes>(create: (_) => Themes()),

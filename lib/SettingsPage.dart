@@ -21,10 +21,10 @@ class _SettingsState extends State<SettingsPage> {
     minLaunches: 3,
     remindDays: 7,
     remindLaunches: 10,
-    googlePlayIdentifier: 'com.outahar.qequalizer',
+    googlePlayIdentifier: 'com.outahar.sarkevenir',
   );
   String _url =
-      "https://play.google.com/store/apps/details?id=com.outahar.qequalizer";
+      "https://play.google.com/store/apps/details?id=com.outahar.sarkevenir";
   void _launchURL() async => await canLaunch(_url)
       ? await launch(_url)
       : throw 'Could not launch $_url';

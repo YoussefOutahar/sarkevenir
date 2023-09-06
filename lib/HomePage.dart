@@ -39,7 +39,7 @@ class _HomeWState extends State<HomeW> {
             if (snapshot.data == "MA") {
               return YoutubePage(isTurkey: isTurkey);
             } else {
-              return RandomDataPage(isTurkey: isTurkey);
+              return YoutubePage(isTurkey: isTurkey);
             }
           } else {
             return Padding(

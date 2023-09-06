@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:sarkevenir/Providers/Themes.dart';
 import 'package:sarkevenir/Youtube/Utils/Downloader.dart';
 import 'package:sarkevenir/Youtube/Utils/Player.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:flutter_youtube_downloader/flutter_youtube_downloader.dart';
 
 class VideoPage extends StatefulWidget {
@@ -32,9 +31,6 @@ class _VideoPageState extends State<VideoPage>
   Downloader download = Downloader();
 
   AnimationController _animationController;
-  YoutubeExplode yt;
-  Video vid;
-
   Future<String> _extractedLink;
 
   bool _isplaying = false;
@@ -246,7 +242,7 @@ class _VideoPageState extends State<VideoPage>
                   ),
                   Positioned(
                     right: 0,
-                    top: MediaQuery.of(context).size.height / 3.2,
+                    top: MediaQuery.of(context).size.height / 3.3,
                     child: Padding(
                       padding: EdgeInsets.all(18.5),
                       child: ClipRRect(

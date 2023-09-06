@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "784170937008",
+    "project_id": "sarki-evreni-1af3a",
+    "storage_bucket": "sarki-evreni-1af3a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:784170937008:android:b5c3a9650adff6d132e975",
+        "android_client_info": {
+          "package_name": "com.outahar.sarkevenir"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "784170937008-17fmp9usam0fbgnf5kfkon5nhb1kp6j5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOfw3UworwZuDJaq8pCUMlb4SGuKegl8c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "784170937008-17fmp9usam0fbgnf5kfkon5nhb1kp6j5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

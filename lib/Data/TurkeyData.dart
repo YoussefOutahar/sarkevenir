@@ -4,7 +4,7 @@ class TurkeyData {
   var yt = YoutubeExplode();
   String _currentQuery;
   List metadata = [];
-  SearchList result;
+  SearchList<SearchVideo> result;
   Future<List<String>> suggestions(String text) async {
     return yt.search.getQuerySuggestions(text);
   }
